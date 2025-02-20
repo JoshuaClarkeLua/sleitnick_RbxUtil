@@ -1,7 +1,7 @@
 [package]
 name = "joshuaclarkelua/component"
 description = "Component class"
-version = "3.0.3"
+version = "3.1.3"
 license = "MIT"
 authors = ["Joshua Clarke", "Stephen Leitnick"]
 registry = "https://github.com/UpliftGames/wally-index"
@@ -14,4 +14,3 @@ Signal = "sleitnick/signal@^2"
 Symbol = "sleitnick/symbol@^2"
 Trove = "sleitnick/trove@^1"
 Promise = "joshuaclarkelua/promise@^4"
-Knit = "joshuaclarkelua/knit@^1"

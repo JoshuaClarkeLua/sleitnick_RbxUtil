@@ -2,7 +2,6 @@ local RunService = game:GetService("RunService")
 local ComponentInitWaitExt = require(script.ComponentInitWaitExt)
 local DefaultComponentExt = require(script.DefaultComponentExt)
 local Component = require(script.Component)
-local Knit = require(script.Parent.Knit)
 local Promise = require(script.Parent.Promise)
 
 local Util = {}
@@ -72,30 +71,9 @@ function Util.new(config): Component
 					comp.Client.Init()
 				end
 			end
+			-- Set to true to indicate the component has been initialized
+			comp[ComponentInitWaitExt.INIT_PROMISE] = true
 			resolve()
-		end)
-		-- Wait for Knit to start
-		:andThenReturn(Knit.OnStart())
-		-- Call KnitInit functions
-		:andThen(function()
-			local mainFn = rawget(comp, 'KnitStart')
-			if typeof(mainFn) == 'function' then
-				mainFn()
-			end
-			if RunService:IsServer() then
-				if typeof(comp.Server.KnitStart) == 'function' then
-					comp.Server.KnitStart()
-				end
-			else
-				if typeof(comp.Client.KnitStart) == 'function' then
-					comp.Client.KnitStart()
-				end
-			end
-			return Promise.defer(function(resolve)
-				-- Set to true to indicate the component has been initialized
-				comp[ComponentInitWaitExt.INIT_PROMISE] = true
-				resolve()
-			end)
 		end)
 	--
 	return comp
