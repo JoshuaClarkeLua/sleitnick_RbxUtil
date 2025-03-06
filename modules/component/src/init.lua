@@ -40,7 +40,7 @@ function Util.new(config): Component
 			-- Call Init functions
 			local mainFn = rawget(comp, 'Init')
 			if typeof(mainFn) == 'function' then
-				mainFn()
+				mainFn(comp)
 			end
 			-- Set to true to indicate the component has been initialized
 			comp[ComponentInitWaitExt.INIT_PROMISE] = true
