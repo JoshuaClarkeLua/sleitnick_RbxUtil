@@ -1,4 +1,3 @@
-local RunService = game:GetService("RunService")
 local ComponentInitWaitExt = require(script.ComponentInitWaitExt)
 local DefaultComponentExt = require(script.DefaultComponentExt)
 local Component = require(script.Component)
@@ -31,25 +30,6 @@ function Util.new(config): Component
 		Extensions = { DefaultComponentExt },
 	}, config)
 	local comp = Component.new(config)
-	comp.Server = {}
-	comp.Client = {}
-	-- Setup Server and Client functions
-	comp.__index = function(t, k)
-		if k == "Server" or k == "Client" then
-			error("Cannot access Component.Server or Component.Client directly", 2)
-		end
-		local fn
-		if RunService:IsServer() then
-			if typeof(comp.Server[k]) == "function" then
-				fn = comp.Server[k]
-			end
-		else
-			if typeof(comp.Client[k]) == "function" then
-				fn = comp.Client[k]
-			end
-		end
-		return fn or comp[k]
-	end
 
 	-- Create init promise
 	comp[ComponentInitWaitExt.INIT_PROMISE] = Promise
@@ -61,15 +41,6 @@ function Util.new(config): Component
 			local mainFn = rawget(comp, 'Init')
 			if typeof(mainFn) == 'function' then
 				mainFn()
-			end
-			if RunService:IsServer() then
-				if typeof(comp.Server.Init) == 'function' then
-					comp.Server.Init()
-				end
-			else
-				if typeof(comp.Client.Init) == 'function' then
-					comp.Client.Init()
-				end
 			end
 			-- Set to true to indicate the component has been initialized
 			comp[ComponentInitWaitExt.INIT_PROMISE] = true
@@ -90,30 +61,6 @@ function Util.MemDebug(tag: string, comp: Component): Component
 				local old = debug.getmemorycategory()
 				debug.setmemorycategory(`{tag}.{k}()`)
 				return __unset(old, v(...))
-			end
-		end
-	end
-	local _server = rawget(comp, "Server")
-	if _server then
-		for k,v in pairs(_server) do
-			if typeof(v) == "function" then
-				_server[k] = function(...)
-					local old = debug.getmemorycategory()
-					debug.setmemorycategory(`{tag}.Server.{k}()`)
-					return __unset(old, v(...))
-				end
-			end
-		end
-	end
-	local _client = rawget(comp, "Client")
-	if _client then
-		for k,v in pairs(_client) do
-			if typeof(v) == "function" then
-				_client[k] = function(...)
-					local old = debug.getmemorycategory()
-					debug.setmemorycategory(`{tag}.Client.{k}()`)
-					return __unset(old, v(...))
-				end
 			end
 		end
 	end

@@ -425,22 +425,7 @@ end
 	Methods and properties are tagged with the above terms to help clarify the level at which they are used.
 ]=]
 local Component = {}
-Component.__index = function(t,k)
-	local v = rawget(t,k) or Component[k]
-	if v ~= nil then
-		return v
-	end
-	if RunService:IsServer() then
-		if typeof(rawget(t, "Server")) == 'table' and typeof(rawget(t.Server, k)) == 'function' then
-			return t.Server[k]
-		end
-	else
-		if typeof(rawget(t, "Client")) == 'table' and typeof(rawget(t.Client, k)) == 'function' then
-			return t.Client[k]
-		end
-	end
-	return
-end
+Component.__index = Component
 
 --[=[
 	@tag Component

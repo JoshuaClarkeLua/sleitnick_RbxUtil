@@ -1,5 +1,3 @@
-local RunService = game:GetService("RunService")
-
 local Ext = {}
 
 function Ext.ShouldConstruct(self)
@@ -8,19 +6,6 @@ function Ext.ShouldConstruct(self)
 	if typeof(mainFn) == 'function' then
 		if not mainFn(self) then
 			return false
-		end
-	end
-	if RunService:IsServer() then
-		if typeof(comp.Server.ShouldConstruct) == 'function' then
-			if not comp.Server.ShouldConstruct(self) then
-				return false
-			end
-		end
-	else
-		if typeof(comp.Client.ShouldConstruct) == 'function' then
-			if not comp.Client.ShouldConstruct(self) then
-				return false
-			end
 		end
 	end
 	return true
@@ -32,15 +17,6 @@ function Ext.Constructing(self)
 	if typeof(mainFn) == 'function' then
 		mainFn(self)
 	end
-	if RunService:IsServer() then
-		if typeof(comp.Server.Constructing) == 'function' then
-			comp.Server.Constructing(self)
-		end
-	else
-		if typeof(comp.Client.Constructing) == 'function' then
-			comp.Client.Constructing(self)
-		end
-	end
 end
 
 function Ext.Constructed(self)
@@ -48,15 +24,6 @@ function Ext.Constructed(self)
 	local mainFn = rawget(comp, 'Constructed')
 	if typeof(mainFn) == 'function' then
 		mainFn(self)
-	end
-	if RunService:IsServer() then
-		if typeof(comp.Server.Constructed) == 'function' then
-			comp.Server.Constructed(self)
-		end
-	else
-		if typeof(comp.Client.Constructed) == 'function' then
-			comp.Client.Constructed(self)
-		end
 	end
 end
 
@@ -66,15 +33,6 @@ function Ext.Starting(self)
 	if typeof(mainFn) == 'function' then
 		mainFn(self)
 	end
-	if RunService:IsServer() then
-		if typeof(comp.Server.Starting) == 'function' then
-			comp.Server.Starting(self)
-		end
-	else
-		if typeof(comp.Client.Starting) == 'function' then
-			comp.Client.Starting(self)
-		end
-	end
 end
 
 function Ext.Started(self)
@@ -82,15 +40,6 @@ function Ext.Started(self)
 	local mainFn = rawget(comp, 'Started')
 	if typeof(mainFn) == 'function' then
 		mainFn(self)
-	end
-	if RunService:IsServer() then
-		if typeof(comp.Server.Started) == 'function' then
-			comp.Server.Started(self)
-		end
-	else
-		if typeof(comp.Client.Started) == 'function' then
-			comp.Client.Started(self)
-		end
 	end
 end
 
@@ -100,15 +49,6 @@ function Ext.Stopping(self)
 	if typeof(mainFn) == 'function' then
 		mainFn(self)
 	end
-	if RunService:IsServer() then
-		if typeof(comp.Server.Stopping) == 'function' then
-			comp.Server.Stopping(self)
-		end
-	else
-		if typeof(comp.Client.Stopping) == 'function' then
-			comp.Client.Stopping(self)
-		end
-	end
 end
 
 function Ext.Stopped(self)
@@ -116,15 +56,6 @@ function Ext.Stopped(self)
 	local mainFn = rawget(comp, 'Stopped')
 	if typeof(mainFn) == 'function' then
 		mainFn(self)
-	end
-	if RunService:IsServer() then
-		if typeof(comp.Server.Stopped) == 'function' then
-			comp.Server.Stopped(self)
-		end
-	else
-		if typeof(comp.Client.Stopped) == 'function' then
-			comp.Client.Stopped(self)
-		end
 	end
 end
 
